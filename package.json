@@ -14,7 +14,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tsed/ajv": "5.61.0",
+    "@hapi/joi": "^17.1.1",
+    "@tsed/ajv": "^5.61.0",
     "@tsed/common": "5.61.0",
     "@tsed/core": "5.61.0",
     "@tsed/di": "5.61.0",
@@ -45,6 +46,7 @@
     "@types/cookie-parser": "1.4.2",
     "@types/cors": "2.8.6",
     "@types/express": "4.17.7",
+    "@types/hapi__joi": "^17.1.4",
     "@types/method-override": "0.0.31",
     "@types/nconf": "^0.10.0",
     "@types/node": "14.0.23",

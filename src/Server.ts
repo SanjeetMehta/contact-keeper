@@ -9,7 +9,7 @@ import * as methodOverride from "method-override";
 import * as cors from "cors";
 import "@tsed/ajv";
 import "@tsed/swagger";
-import {Config} from "../config/index";
+import {Config} from "./config/index";
 export const rootDir = __dirname;
 
 @Configuration({
