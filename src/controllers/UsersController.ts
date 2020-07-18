@@ -1,9 +1,8 @@
-import {Controller, Get, Post, Required, BodyParams} from "@tsed/common";
-import UserSchema from "../models/entity/UserSchema";
-import {User, JoiUser} from "../models/User";
-import {check, validationResult} from "express-validator";
+import {BodyParams, Controller, Post, Required} from "@tsed/common";
 import {BadRequest} from "@tsed/exceptions";
-import Joi from "@hapi/joi";
+import * as bycrypt from "bcrypt";
+import UserSchema from "../models/entity/UserSchema";
+import {JoiUser, User} from "../models/User";
 @Controller("/users")
 export class UsersController {
     @Post("/")
@@ -14,8 +13,21 @@ export class UsersController {
             allowUnknown: false
         });
         if (error) {
-            throw new BadRequest(error.message);
+            const badRequest = new BadRequest(error.message);
+            throw badRequest;
         }
-        return user;
+        try {
+            let dbUser = await UserSchema.findOne({email: user.email});
+            if (dbUser) {
+                throw new BadRequest("User already present");
+            }
+            const salt = await bycrypt.genSalt(10);
+            user.password = await bycrypt.hash(user.password, salt);
+            const userToBeSaved = new UserSchema(user);
+            userToBeSaved.save();
+            return user;
+        } catch (err) {
+            throw err;
+        }
     }
 }
