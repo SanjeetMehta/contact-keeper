@@ -8,7 +8,7 @@ import {
     UseBefore,
     Req
 } from "@tsed/common";
-import {User, JoiUser} from "../models/User";
+import {User, JoiUser, LoginUser} from "../models/User";
 import UserSchema from "../models/entity/UserSchema";
 import {BadRequest} from "@tsed/exceptions";
 import ErrorMiddleware from "../middlewares/ErrorMiddleware";
@@ -37,7 +37,7 @@ export class AuthController {
     }
 
     @Post("/")
-    public async loginUser(@Required() @BodyParams() user: User) {
+    public async loginUser(@Required() @BodyParams() user: LoginUser) {
         const {error} = JoiUser.getSchema().validate(user, {
             abortEarly: false,
             allowUnknown: false

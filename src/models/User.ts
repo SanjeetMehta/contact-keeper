@@ -12,6 +12,14 @@ export class User {
     password: string;
 }
 
+export class LoginUser {
+    @Property()
+    email: string;
+
+    @Property()
+    password: string;
+}
+
 export class JoiUser {
     public static getSchema() {
         return Joi.object().keys({
