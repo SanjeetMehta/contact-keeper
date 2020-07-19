@@ -23,6 +23,7 @@
     "@tsed/platform-express": "5.61.0",
     "@tsed/swagger": "5.61.0",
     "@types/cors": "^2.8.6",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/mongoose": "^5.7.32",
     "@types/swagger-schema-official": "2.0.20",
     "ajv": "6.12.3",
@@ -40,7 +41,8 @@
     "method-override": "3.0.0",
     "mongoose": "^5.9.25",
     "nconf": "^0.10.0",
-    "ts-httpexceptions": "^4.1.0"
+    "ts-httpexceptions": "^4.1.0",
+    "util.promisify": "^1.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",

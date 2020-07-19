@@ -4,11 +4,14 @@ import * as bycrypt from "bcrypt";
 import UserSchema from "../models/entity/UserSchema";
 import {JoiUser, User} from "../models/User";
 import ErrorMiddleware from "../middlewares/ErrorMiddleware";
+import {sign} from "jsonwebtoken";
+import {Config} from "../config/index";
+import * as util from "util";
 @Controller("/users")
 @UseAfter(ErrorMiddleware)
 export class UsersController {
     @Post("/")
-    public async saveUser(@Required() @BodyParams() user: User) {
+    public async registerUser(@Required() @BodyParams() user: User) {
         console.log("");
         const {error} = JoiUser.getSchema().validate(user, {
             abortEarly: false,
@@ -29,7 +32,14 @@ export class UsersController {
             user.password = await bycrypt.hash(user.password, salt);
             const userToBeSaved = new UserSchema(user);
             userToBeSaved.save();
-            return user;
+            const payload = {
+                user: {
+                    id: userToBeSaved.id
+                }
+            };
+            const jwttoken = util.promisify(sign);
+            const token = await jwttoken(payload, Config.get("jwtSecret"));
+            return {token};
         } catch (err) {
             throw err;
         }

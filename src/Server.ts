@@ -52,8 +52,7 @@ export class Server {
     }
     public $onInit(): Promise<any> {
         return new Promise((resolve, reject) => {
-            new Config()
-                .connectToDb()
+            Config.connectToDb()
                 .then(resolve)
                 .catch(error => {
                     console.log(error);
