@@ -21,7 +21,7 @@ export class JoiContact {
     public static getSchema() {
         return Joi.object().keys({
             name: Joi.string().required(),
-            email: Joi.string().optional(),
+            email: Joi.string().email().optional(),
             phone: Joi.string().optional(),
             type: Joi.string().optional()
         });

@@ -8,7 +8,8 @@ import {
     Req,
     UseAfter,
     Required,
-    BodyParams
+    BodyParams,
+    PathParams
 } from "@tsed/common";
 import {TokenValidator} from "../middlewares/TokenValidator";
 import ContactSchema from "../models/entity/ContactSchema";
@@ -59,12 +60,60 @@ export class ContactsController {
     }
 
     @Put("/:id")
-    public async updateContactById() {
-        return "hello";
+    public async updateContactById(
+        @PathParams("id") contactId: string,
+        @Required() @BodyParams() updatedContact: Contact,
+        @Req() req: Req
+    ) {
+        try {
+            const loggedInUser: any = req.headers.user;
+            const {error} = JoiContact.getSchema().validate(updatedContact, {
+                abortEarly: false,
+                allowUnknown: false
+            });
+            if (error) {
+                throw {
+                    status: 400,
+                    message: error.message
+                };
+            }
+            const contacts = await ContactSchema.findById(contactId);
+            if (contacts && contacts.user == loggedInUser.id) {
+                contacts.name = updatedContact.name;
+                contacts.email = updatedContact.email;
+                contacts.phone = updatedContact.phone;
+                contacts.save();
+            } else {
+                throw {
+                    status: 404,
+                    message: "contact not found"
+                };
+            }
+            return contacts;
+        } catch (err) {
+            throw err;
+        }
     }
 
     @Delete("/:id")
-    public async deleteContactById() {
-        return "hello";
+    public async deleteContactById(
+        @PathParams("id") contactId: string,
+        @Req() req: Req
+    ) {
+        try {
+            const loggedInUser: any = req.headers.user;
+            const contacts = await ContactSchema.findById(contactId);
+            if (contacts && contacts.user == loggedInUser.id) {
+                await ContactSchema.findByIdAndDelete(contactId);
+            } else {
+                throw {
+                    status: 404,
+                    message: "contact not found"
+                };
+            }
+            return contacts;
+        } catch (err) {
+            throw err;
+        }
     }
 }
