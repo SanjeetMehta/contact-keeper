@@ -15,7 +15,7 @@ export class User {
 export class JoiUser {
     public static getSchema() {
         return Joi.object().keys({
-            name: Joi.string().required(),
+            name: Joi.string().optional(),
             email: Joi.string().required().email(),
             password: Joi.string().required().min(7)
         });

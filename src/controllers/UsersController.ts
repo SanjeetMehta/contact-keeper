@@ -12,7 +12,6 @@ import * as util from "util";
 export class UsersController {
     @Post("/")
     public async registerUser(@Required() @BodyParams() user: User) {
-        console.log("");
         const {error} = JoiUser.getSchema().validate(user, {
             abortEarly: false,
             allowUnknown: false
