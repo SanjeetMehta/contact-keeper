@@ -1,9 +1,11 @@
-import {BodyParams, Controller, Post, Required} from "@tsed/common";
-import {BadRequest} from "@tsed/exceptions";
+import {BodyParams, Controller, Post, Required, UseAfter} from "@tsed/common";
+import {BadRequest, Exception} from "@tsed/exceptions";
 import * as bycrypt from "bcrypt";
 import UserSchema from "../models/entity/UserSchema";
 import {JoiUser, User} from "../models/User";
+import ErrorMiddleware from "../middlewares/ErrorMiddleware";
 @Controller("/users")
+@UseAfter(ErrorMiddleware)
 export class UsersController {
     @Post("/")
     public async saveUser(@Required() @BodyParams() user: User) {
@@ -13,8 +15,10 @@ export class UsersController {
             allowUnknown: false
         });
         if (error) {
-            const badRequest = new BadRequest(error.message);
-            throw badRequest;
+            throw {
+                status: 400,
+                message: error.message
+            };
         }
         try {
             let dbUser = await UserSchema.findOne({email: user.email});

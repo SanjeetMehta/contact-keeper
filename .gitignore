@@ -30,6 +30,8 @@ build/Release
 node_modules
 .npmrc
 *.log
+# Config
+src/config/appConfig.json
 
 # Typings
 typings/
@@ -51,3 +53,4 @@ test/**/*.js.map
 # Project
 /public
 /dist
+
